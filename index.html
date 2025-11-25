@@ -1,0 +1,448 @@
+<!DOCTYPE html> 
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>$ORANGE – Giant Orange</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <link href="https://fonts.googleapis.com/css2?family=Kalam:wght@400;700&family=Rock+Salt&display=swap" rel="stylesheet">
+
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* ORANGE CURSOR + SCROLLBAR HIDDEN */
+    body {
+      cursor: url("logo.png") 16 16, auto;
+      font-family: "Kalam", cursive;
+      background: #F6D7A8;
+      color: #2B1F17;
+      overflow-x: hidden;
+      overflow-y: scroll;
+      -ms-overflow-style: none;   /* IE / Edge */
+      scrollbar-width: none;      /* Firefox */
+    }
+
+    body::-webkit-scrollbar {
+      display: none;              /* Chrome / Safari */
+    }
+
+    /* MINI ORANGE TRAIL */
+    .orange-trail {
+      position: fixed;
+      width: 32px;
+      height: 32px;
+      background: url("logo.png") center/cover no-repeat;
+      pointer-events: none;
+      opacity: 0.85;
+      transform: translate(-50%, -50%) scale(1);
+      filter: drop-shadow(0 0 6px rgba(255,140,0,0.6));
+      transition: opacity 0.4s linear, transform 0.4s ease-out;
+      z-index: 200;
+    }
+
+    /* CUSTOM SCROLL INDICATOR (rechts, grote + kleine orange) */
+    .scroll-indicator {
+      position: fixed;
+      right: 26px;
+      top: 50%;
+      transform: translateY(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 16px;
+      z-index: 150;
+      pointer-events: none;
+    }
+
+    .scroll-orange {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: url("logo.png") center/cover no-repeat;
+      filter: drop-shadow(0 0 12px rgba(255,140,0,0.9));
+      transition: transform 0.2s ease, filter 0.2s ease;
+    }
+
+    .scroll-orange.small {
+      width: 22px;
+      height: 22px;
+      opacity: 0.6;
+      filter: drop-shadow(0 0 6px rgba(180,120,0,0.7));
+    }
+
+    .scroll-orange.bounce {
+      filter: drop-shadow(0 0 22px rgba(255,170,0,1));
+    }
+
+    a { text-decoration: none; color: inherit; }
+
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: #F6D7A8;
+      display: flex;
+      align-items: center;
+      padding: 0 20px;
+      border-bottom: 2px solid rgba(0,0,0,0.05);
+      z-index: 99;
+    }
+
+    .top-logo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 2px solid #2B1F17;
+      background: url("logo.png") center/cover no-repeat;
+      margin-right: 12px;
+    }
+
+    .top-title {
+      font-size: 28px;
+      letter-spacing: 1px;
+      font-family: "Rock Salt", cursive;
+    }
+
+    .content {
+      max-width: 1250px;
+      margin: 0 auto;
+      padding: 0 26px;
+    }
+
+    .hero {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 120px;
+      padding-bottom: 60px;
+    }
+
+    .hero img {
+      width: 560px;
+      height: auto;
+    }
+
+    .hero-text {
+      max-width: 520px;
+    }
+
+    .hero-title {
+      font-size: 82px;
+      font-family: "Rock Salt", cursive;
+      line-height: 0.9;
+    }
+
+    .hero-sub {
+      font-size: 38px;
+      color: #C02828;
+      margin-bottom: 22px;
+      font-family: "Rock Salt", cursive;
+    }
+
+    .hero-btns {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 24px;
+    }
+
+    .btn {
+      padding: 8px 26px;
+      font-size: 26px;
+      border-radius: 14px;
+      border: 3px solid #2B1F17;
+      font-family: "Kalam", cursive;
+      font-weight: 700;
+    }
+
+    .btn-black { background: #2B1F17; color: #F6D7A8; }
+    .btn-white { background: #F6D7A8; }
+
+    .hero-desc {
+      font-size: 24px;
+      max-width: 460px;
+      line-height: 1.4;
+    }
+
+    .socials {
+      position: absolute;
+      bottom: 24px;
+      right: 24px;
+      display: flex;
+      gap: 12px;
+    }
+
+    .socials a {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      border: 3px solid #2B1F17;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 22px;
+      font-family: "Rock Salt", cursive;
+    }
+
+    .dark-section {
+      background: #241814;
+      width: 100%;
+      padding: 90px 0;
+      color: #F6D7A8;
+      margin-top: 40px;
+    }
+
+    .big-title {
+      font-size: 90px;
+      color: #D72626;
+      font-family: "Rock Salt", cursive;
+      margin-bottom: 30px;
+    }
+
+    .text-block {
+      font-size: 26px;
+      line-height: 1.45;
+      max-width: 950px;
+      position: relative;
+    }
+
+    .float-image {
+      width: 300px;
+      float: left;
+      margin-right: 20px;
+      margin-top: 10px;
+      border-radius: 50%;
+      border: 3px solid #F6D7A8;
+      background: #F6D7A8;
+    }
+
+    .float-image img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 50%;
+    }
+
+    .tokenomics {
+      background: #F6D7A8;
+      padding: 110px 0;
+    }
+
+    .token-title {
+      font-size: 90px;
+      color: #D72626;
+      margin-bottom: 20px;
+      font-family: "Rock Salt", cursive;
+    }
+
+    .contract {
+      font-size: 28px;
+      margin-bottom: 14px;
+    }
+
+    .copy-btn {
+      background: #F6D7A8;
+      border: 3px solid #2B1F17;
+      padding: 10px 24px;
+      border-radius: 16px;
+      font-size: 26px;
+      cursor: pointer;
+      margin-bottom: 40px;
+      font-family: "Kalam", cursive;
+      font-weight: 700;
+    }
+
+    .token-grid {
+      display: flex;
+      gap: 60px;
+      flex-wrap: wrap;
+      margin-top: 30px;
+    }
+
+    .token-box {
+      font-size: 26px;
+      width: 440px;
+      line-height: 1.4;
+    }
+
+    .token-box-title {
+      font-size: 32px;
+      margin-bottom: 10px;
+      color: #D72626;
+      font-family: "Rock Salt", cursive;
+    }
+
+    .footer {
+      padding: 40px;
+      text-align: center;
+      font-size: 20px;
+      color: #2B1F17;
+    }
+    /* VERWIJDER SCROLLBAR OP ALLES — 100% CROSS-BROWSER */
+html, body {
+  scrollbar-width: none !important;      /* Firefox */
+  -ms-overflow-style: none !important;    /* IE/Edge */
+}
+
+html::-webkit-scrollbar,
+body::-webkit-scrollbar {
+  width: 0 !important;
+  height: 0 !important;
+  display: none !important;               /* Chrome/Safari */
+}
+
+  </style>
+</head>
+
+<body>
+
+  <div class="top-bar">
+    <div class="top-logo"></div>
+    <div class="top-title">$ORANGE</div>
+  </div>
+
+  <!-- SCROLL INDICATOR -->
+  <div class="scroll-indicator">
+    <div class="scroll-orange big"></div>
+    <div class="scroll-orange small"></div>
+  </div>
+
+  <div class="content hero">
+    <img src="logo.png" alt="Giant Orange Mascot">
+
+    <div class="hero-text">
+      <div class="hero-title">$ORANGE</div>
+      <div class="hero-sub">Giant Orange</div>
+
+      <div class="hero-btns">
+        <a href="https://x.com/i/communities/1987369557657329837" target="_blank" class="btn btn-black">Xcom</a>
+        <a href="https://dexscreener.com/solana/aydmk6m64e2uwre9ked3m4spyg96vguespglwdleuthv" target="_blank" class="btn btn-white">Chart</a>
+      </div>
+
+      <p class="hero-desc">
+        Giant Orange is the emerging mascot of xAI’s upcoming Imagine 1.0.
+      </p>
+    </div>
+
+    <div class="socials">
+      <a href="https://x.com/i/communities/1987369557657329837" target="_blank">X</a>
+      <a href="https://dexscreener.com/solana/aydmk6m64e2uwre9ked3m4spyg96vguespglwdleuthv" target="_blank">DEX</a>
+    </div>
+  </div>
+
+  <section class="dark-section">
+    <div class="content">
+      <div class="big-title">What is Giant Orange?</div>
+
+      <div class="text-block">
+        <div class="float-image">
+          <img src="logo.png" alt="Giant Orange">
+        </div>
+
+        Giant Orange is the digital fruit of the xAI ecosystem. For months, creators, engineers and community members around Grok and Imagine have been teasing it, posting it, and building stories around it. Now it lives on-chain. Imagine 1.0 is expected to bring advanced image generation and editing to the world. Giant Orange represents the identity of that release. A visual motif that keeps appearing in demos, comics, replies and dev conversations.
+      </div>
+    </div>
+  </section>
+
+  <section class="tokenomics">
+    <div class="content">
+      <div class="token-title">Orangenomics</div>
+
+      <div class="contract" id="contract">
+        EXUDKUiit7NVWReHWowqTbam4e4mG9nU3hLeLq9mpump
+      </div>
+
+      <button class="copy-btn" onclick="copyContract()">Click to copy</button>
+
+      <div class="token-grid">
+        <div class="token-box">
+          <div class="token-box-title">Token info</div>
+          Supply: 1,000,000,000<br>
+          LP Locked<br>
+          Contract Renounced<br>
+          Zero tax<br>
+          Fully community-driven<br>
+          Built for the arrival of Imagine 1.0
+        </div>
+
+        <div class="token-box">
+          <div class="token-box-title">Why $ORANGE?</div>
+          Developer conversations<br>
+          Pinned tweets<br>
+          Imagine test outputs<br>
+          Community comics<br>
+          AI demos<br>
+          Image editing previews<br>
+          Technical discussions<br><br>
+          No other icon appears this frequently in relation to Imagine.<br><br>
+          Where Grok has a face<br>
+          Imagine has the Orange.
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="footer">
+    $ORANGE is a community-created token inspired by xAI, Grok and Imagine 1.0.
+  </div>
+
+<script>
+  function copyContract() {
+    const text = document.getElementById("contract").innerText.trim();
+    navigator.clipboard.writeText(text).then(() => {
+      const btn = document.querySelector(".copy-btn");
+      btn.innerText = "Copied!";
+      setTimeout(() => btn.innerText = "Click to copy", 1500);
+    });
+  }
+
+  /* MINI ORANGE TRAIL SCRIPT */
+  document.addEventListener("mousemove", (e) => {
+    const orange = document.createElement("div");
+    orange.classList.add("orange-trail");
+    orange.style.left = e.pageX + "px";
+    orange.style.top = e.pageY + "px";
+
+    document.body.appendChild(orange);
+
+    setTimeout(() => {
+      orange.style.opacity = "0";
+      orange.style.transform = "translate(-50%, -50%) scale(0.4)";
+      setTimeout(() => orange.remove(), 400);
+    }, 60);
+  });
+
+  /* SCROLL INDICATOR ANIMATIE */
+  const bigOrange = document.querySelector(".scroll-orange.big");
+  const smallOrange = document.querySelector(".scroll-orange.small");
+  let scrollTimeout;
+
+  window.addEventListener("scroll", () => {
+    const doc = document.documentElement;
+    const scrollMax = doc.scrollHeight - window.innerHeight;
+    const percent = scrollMax > 0 ? doc.scrollTop / scrollMax : 0;
+
+    // schaal grote orange op basis van scroll-percentage
+    const scale = 1 + percent * 0.8;
+    bigOrange.style.transform = `scale(${scale})`;
+
+    // optionele subtle beweging van de kleine orange
+    const smallOffset = percent * 6; // paar px
+    smallOrange.style.transform = `translateY(${smallOffset}px)`;
+
+    // bounce / glow effect bij scroll
+    bigOrange.classList.add("bounce");
+    clearTimeout(scrollTimeout);
+    scrollTimeout = setTimeout(() => {
+      bigOrange.classList.remove("bounce");
+    }, 180);
+  });
+</script>
+
+</body>
+</html>
